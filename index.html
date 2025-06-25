@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographie: Le Guide Visuel du Trading SMC & ICT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .flowchart-step {
+            position: relative;
+            padding-left: 2.5rem;
+            padding-bottom: 2rem;
+        }
+        .flowchart-step:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 1.25rem;
+            width: 2px;
+            height: 100%;
+            background-color: #318CE7;
+        }
+        .flowchart-dot {
+            position: absolute;
+            left: calc(1rem - 0.4rem);
+            top: 0.5rem;
+            height: 1rem;
+            width: 1rem;
+            border-radius: 9999px;
+            background-color: #0048BA;
+            border: 2px solid #E0F2F7;
+        }
+    </style>
+</head>
+<body class="bg-[#0A192F] text-gray-200">
+
+    <!-- 
+    PLAN SUMMARY
+    Narrative Plan: Introduction (What is SMC?) -> Market Language (Structure Concepts) -> Key Ingredients (Liquidity, OB, FVG) -> The Blueprint (Step-by-step model) -> Example in Action (A full trade setup) -> The Trader's Mindset (Psychology & Next Steps).
+    Chosen Color Palette: Brilliant Blues (#0048BA, #318CE7, #89CFF0, #E0F2F7) with a dark navy background (#0A192F) for high contrast and a professional feel.
+    Visualization Strategy:
+    - Section 1: Typography for impact.
+    - Section 2: Custom HTML/CSS diagram for Market Structure (NO SVG).
+    - Section 3: Combination of Chart.js Donut chart for OBs, a creative Chart.js Bar chart to illustrate FVGs, and an HTML/CSS pictograph for Liquidity (NO SVG).
+    - Section 4: A vertical flowchart built with structured HTML/CSS (NO SVG/Mermaid).
+    - Section 5: A Chart.js Line chart to visualize the trade example price action.
+    - Section 6: A combination of a styled list and a Chart.js Bar chart for mindset and next steps.
+    NO SVG/Mermaid Confirmation: Explicitly confirmed. All visualizations are either pure HTML/CSS with Tailwind or rendered on a <canvas> element by the Chart.js library.
+    -->
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-12 md:mb-20">
+            <h1 class="text-4xl md:text-6xl font-black text-white leading-tight">Le Concept <span class="text-[#89CFF0]">Smart Money</span></h1>
+            <p class="mt-4 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">Une infographie pour apprendre à identifier les mouvements institutionnels et trader en harmonie avec le marché.</p>
+        </header>
+
+        <main class="space-y-16">
+
+            <section id="market-structure">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-white">Le Langage du Marché</h2>
+                    <p class="mt-2 text-gray-400 max-w-2xl mx-auto">Le "Smart Money" ne voit pas de simples supports ou résistances. Il voit la structure du marché et les pools de liquidité. Comprendre cette structure est la première étape.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
+                    <div class="bg-[#172A45] p-6 rounded-xl shadow-lg border border-blue-800">
+                        <h3 class="text-2xl font-bold text-[#89CFF0]">Break of Structure (BOS)</h3>
+                        <p class="mt-2 mb-4 h-12">Signale une <span class="font-semibold">continuation</span> de la tendance actuelle.</p>
+                        <div class="bg-[#0A192F] p-4 rounded-lg h-32 flex items-end justify-center">
+                            <span class="text-4xl text-green-400">↗</span>
+                            <span class="text-sm text-gray-400">Nouveau plus haut</span>
+                        </div>
+                        <p class="mt-4 text-sm text-gray-400">Dans une tendance haussière, un BOS se produit lorsque le prix crée un nouveau plus haut, plus élevé que le précédent.</p>
+                    </div>
+                    <div class="bg-[#172A45] p-6 rounded-xl shadow-lg border border-blue-800">
+                        <h3 class="text-2xl font-bold text-[#89CFF0]">Change of Character (CHoCH)</h3>
+                        <p class="mt-2 mb-4 h-12">Donne le premier indice d'un <span class="font-semibold">renversement</span> de tendance potentiel.</p>
+                         <div class="bg-[#0A192F] p-4 rounded-lg h-32 flex items-end justify-center">
+                            <span class="text-4xl text-red-400">↘</span>
+                            <span class="text-sm text-gray-400">Cassure du dernier plus bas</span>
+                        </div>
+                        <p class="mt-4 text-sm text-gray-400">Dans une tendance haussière, un CHoCH se produit lorsque le prix casse le dernier plus bas significatif.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="key-ingredients">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-white">Les Ingrédients Clés de l'Analyse</h2>
+                    <p class="mt-2 text-gray-400 max-w-2xl mx-auto">Trois concepts sont au cœur de la stratégie SMC. Ils vous aident à identifier où et pourquoi le "Smart Money" pourrait intervenir.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-[#172A45] p-6 rounded-xl shadow-lg border border-blue-800 flex flex-col">
+                        <h3 class="text-xl font-bold text-[#89CFF0] mb-2">1. La Liquidité</h3>
+                        <p class="text-gray-400 flex-grow">La cible principale. Ce sont les zones où s'accumulent les stop-loss, que les institutions "chassent" pour exécuter leurs ordres.</p>
+                        <div class="mt-4 bg-[#0A192F] p-4 rounded-lg text-center">
+                             <p class="text-green-400 text-2xl font-mono">$$$</p>
+                             <div class="w-full h-1 bg-gray-600 my-1"></div>
+                             <p class="text-gray-400 text-xs">Liquidité (Buy-side)</p>
+                             <div class="h-12"></div>
+                             <p class="text-gray-400 text-xs">Liquidité (Sell-side)</p>
+                             <div class="w-full h-1 bg-gray-600 my-1"></div>
+                             <p class="text-red-400 text-2xl font-mono">$$$</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#172A45] p-6 rounded-xl shadow-lg border border-blue-800 flex flex-col">
+                        <h3 class="text-xl font-bold text-[#89CFF0] mb-2">2. L'Order Block (OB)</h3>
+                        <p class="text-gray-400 flex-grow">La zone de décision. C'est la dernière bougie opposée avant une forte impulsion, marquant une zone d'ordres institutionnels non mitigés.</p>
+                        <div class="mt-4 chart-container h-64 md:h-auto"><canvas id="orderBlockChart"></canvas></div>
+                    </div>
+                    <div class="bg-[#172A45] p-6 rounded-xl shadow-lg border border-blue-800 flex flex-col">
+                        <h3 class="text-xl font-bold text-[#89CFF0] mb-2">3. Le Fair Value Gap (FVG)</h3>
+                        <p class="text-gray-400 flex-grow">L'inefficacité du marché. Un déséquilibre de prix qui agit comme un aimant, où le prix a tendance à revenir pour le combler.</p>
+                        <div class="mt-4 chart-container h-64 md:h-auto"><canvas id="fvgChart"></canvas></div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="blueprint">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-white">Le Plan de Trading SMC</h2>
+                    <p class="mt-2 text-gray-400 max-w-2xl mx-auto">Le trading avec le Smart Money Concept suit un processus logique et répétable. Voici le modèle décomposé en 6 étapes claires.</p>
+                </div>
+                <div class="md:grid md:grid-cols-5 gap-8">
+                    <div class="md:col-span-3 bg-[#172A45] p-6 md:p-8 rounded-xl shadow-lg border border-blue-800">
+                        <div class="relative">
+                            <div class="flowchart-step">
+                                <div class="flowchart-dot"></div>
+                                <h4 class="font-bold text-lg text-white">1. Identifier la Tendance</h4>
+                                <p class="text-gray-400">Déterminez la direction de fond du marché sur un horizon de temps supérieur (HTF).</p>
+                            </div>
+                            <div class="flowchart-step">
+                                <div class="flowchart-dot"></div>
+                                <h4 class="font-bold text-lg text-white">2. Attendre une Chasse à la Liquidité</h4>
+                                <p class="text-gray-400">Soyez patient. Attendez que le prix prenne la liquidité d'un ancien plus haut ou plus bas significatif.</p>
+                            </div>
+                            <div class="flowchart-step">
+                                <div class="flowchart-dot"></div>
+                                <h4 class="font-bold text-lg text-white">3. Confirmer avec une Structure</h4>
+                                <p class="text-gray-400">Cherchez un CHoCH (pour un renversement) ou un BOS (pour une continuation) après la prise de liquidité.</p>
+                            </div>
+                            <div class="flowchart-step">
+                                <div class="flowchart-dot"></div>
+                                <h4 class="font-bold text-lg text-white">4. Repérer un Point d'Intérêt (POI)</h4>
+                                <p class="text-gray-400">Identifiez l'Order Block (OB) ou le Fair Value Gap (FVG) créé par le mouvement impulsif.</p>
+                            </div>
+                            <div class="flowchart-step">
+                                <div class="flowchart-dot"></div>
+                                <h4 class="font-bold text-lg text-white">5. Entrer sur le Retracement</h4>
+                                <p class="text-gray-400">Placez un ordre limite sur votre POI et attendez que le prix revienne tester la zone.</p>
+                            </div>
+                            <div class="flowchart-step">
+                                <div class="flowchart-dot"></div>
+                                <h4 class="font-bold text-lg text-white">6. Gérer le Risque</h4>
+                                <p class="text-gray-400">Positionnez votre Stop Loss de l'autre côté du POI et visez un pool de liquidité opposé pour le Take Profit.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2 mt-8 md:mt-0 flex items-center justify-center">
+                        <div class="chart-container"><canvas id="tradeExampleChart"></canvas></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="mindset">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-white">La Discipline du Trader</h2>
+                    <p class="mt-2 text-gray-400 max-w-2xl mx-auto">La stratégie n'est qu'une partie de l'équation. Le succès à long terme dépend de votre psychologie et de votre engagement.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-[#172A45] p-6 rounded-xl shadow-lg border border-blue-800">
+                        <h3 class="text-xl font-bold text-white mb-4">Principes Fondamentaux</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <span class="text-[#89CFF0] font-bold text-2xl mr-4">✓</span>
+                                <div>
+                                    <h4 class="font-semibold">Patience Stratégique</h4>
+                                    <p class="text-gray-400">N'entrez pas sur le marché par ennui. Attendez que votre configuration précise se présente.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-[#89CFF0] font-bold text-2xl mr-4">✓</span>
+                                <div>
+                                    <h4 class="font-semibold">Gestion du Risque Rigoureuse</h4>
+                                    <p class="text-gray-400">Un Stop Loss n'est pas une option, c'est une règle. Protégez toujours votre capital.</p>
+                                </div>
+                            </li>
+                             <li class="flex items-start">
+                                <span class="text-[#89CFF0] font-bold text-2xl mr-4">✓</span>
+                                <div>
+                                    <h4 class="font-semibold">Processus > Résultats</h4>
+                                    <p class="text-gray-400">Concentrez-vous sur l'exécution parfaite de votre plan, pas sur le gain de chaque trade.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                     <div class="bg-[#172A45] p-6 rounded-xl shadow-lg border border-blue-800">
+                         <h3 class="text-xl font-bold text-white mb-4">Prochaines Étapes Essentielles</h3>
+                         <p class="text-gray-400 mb-4">La connaissance doit être transformée en compétence. Priorisez ces actions pour progresser.</p>
+                         <div class="chart-container"><canvas id="nextStepsChart"></canvas></div>
+                     </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="text-center mt-20 py-8 border-t border-blue-900">
+            <p class="text-gray-500">Infographie créée pour visualiser les concepts de trading Smart Money.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const brilliantBlues = {
+            cobalt: '#0048BA',
+            bleuDeFrance: '#318CE7',
+            babyBlue: '#89CFF0',
+            lightCyan: '#E0F2F7',
+            darkNavy: '#0A192F',
+            cardBg: '#172A45'
+        };
+
+        const chartTextColor = brilliantBlues.lightCyan;
+
+        function wrapLabels(label, maxWidth) {
+            const words = label.split(' ');
+            let lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + words[i].length + 1 < maxWidth) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            } else {
+                return label;
+            }
+        };
+
+        const defaultChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: chartTextColor
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: chartTextColor },
+                    grid: { color: 'rgba(137, 207, 240, 0.1)' }
+                },
+                y: {
+                    ticks: { color: chartTextColor },
+                    grid: { color: 'rgba(137, 207, 240, 0.1)' }
+                }
+            }
+        };
+        
+        // Chart 1: Order Block Chart
+        const obCtx = document.getElementById('orderBlockChart').getContext('2d');
+        new Chart(obCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Order Block', 'FVG / Imbalance', 'Autre'],
+                datasets: [{
+                    label: 'Composition du Point d\'Intérêt',
+                    data: [65, 25, 10],
+                    backgroundColor: [
+                        brilliantBlues.cobalt,
+                        brilliantBlues.bleuDeFrance,
+                        brilliantBlues.cardBg
+                    ],
+                    borderColor: brilliantBlues.darkNavy,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { color: chartTextColor }
+                    },
+                    tooltip: {
+                        callbacks: {
+                           title: tooltipTitleCallback
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Anatomie d\'un POI',
+                        color: chartTextColor
+                    }
+                }
+            }
+        });
+
+        // Chart 2: FVG Chart
+        const fvgCtx = document.getElementById('fvgChart').getContext('2d');
+        new Chart(fvgCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Bougie 1', 'Bougie 2 (Impulsion)', 'Bougie 3'],
+                datasets: [{
+                    label: 'Prix Bas',
+                    data: [10, 5, 15],
+                    backgroundColor: brilliantBlues.cobalt,
+                    borderWidth: 0,
+                    barPercentage: 1.0,
+                    categoryPercentage: 1.0
+                },{
+                    label: 'FVG (Zone à combler)',
+                    data: [5, 0, 0], 
+                    backgroundColor: brilliantBlues.bleuDeFrance,
+                    borderWidth: 0,
+                    barPercentage: 1.0,
+                    categoryPercentage: 1.0
+                }, {
+                    label: 'Prix Haut',
+                    data: [5, 25, 5],
+                    backgroundColor: brilliantBlues.cobalt,
+                    borderWidth: 0,
+                    barPercentage: 1.0,
+                    categoryPercentage: 1.0
+                }]
+            },
+            options: {
+                ...defaultChartOptions,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
+                },
+                scales: {
+                    x: { stacked: true, ticks: { color: chartTextColor }, grid: { display: false } },
+                    y: { stacked: true, grid: { color: 'rgba(137, 207, 240, 0.1)' }, ticks: { display: false } }
+                }
+            }
+        });
+
+        // Chart 3: Trade Example Chart
+        const tradeCtx = document.getElementById('tradeExampleChart').getContext('2d');
+        new Chart(tradeCtx, {
+            type: 'line',
+            data: {
+                labels: ['Début', 'Prise Liquidité', 'CHoCH', 'Formation POI', 'Retracement', 'Entrée', 'TP'],
+                datasets: [{
+                    label: 'Mouvement du Prix',
+                    data: [60, 40, 75, 70, 55, 55, 90],
+                    fill: true,
+                    backgroundColor: 'rgba(49, 140, 231, 0.3)',
+                    borderColor: brilliantBlues.bleuDeFrance,
+                    tension: 0.3,
+                    pointBackgroundColor: brilliantBlues.lightCyan,
+                    pointRadius: 5,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                ...defaultChartOptions,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { title: tooltipTitleCallback } },
+                    title: { display: true, text: 'Exemple de Trade Haussier', color: chartTextColor }
+                },
+                scales: {
+                     y: { grid: { color: 'rgba(137, 207, 240, 0.1)' }, ticks: { display: false } },
+                     x: { ticks: { color: chartTextColor, maxRotation: 45, minRotation: 45 }, grid: { display: false } }
+                }
+            }
+        });
+
+        // Chart 4: Next Steps Chart
+        const nextStepsCtx = document.getElementById('nextStepsChart').getContext('2d');
+        new Chart(nextStepsCtx, {
+            type: 'bar',
+            data: {
+                labels: [wrapLabels('Pratiquer en Démo', 16), wrapLabels('Backtester la Stratégie', 16), wrapLabels('Étudier Continuellement', 16)],
+                datasets: [{
+                    label: 'Niveau d\'Importance',
+                    data: [90, 95, 85],
+                    backgroundColor: [brilliantBlues.babyBlue, brilliantBlues.bleuDeFrance, brilliantBlues.cobalt],
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                ...defaultChartOptions,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { title: tooltipTitleCallback } }
+                },
+                scales: {
+                    x: { grid: { color: 'rgba(137, 207, 240, 0.1)' }, ticks: { color: chartTextColor } },
+                    y: { grid: { display: false }, ticks: { color: chartTextColor, font: { size: 14 } } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
