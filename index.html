@@ -1,892 +1,577 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROVA RANAIVO - Développeur Fullstack</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>John Doe - Creative Developer & Designer</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Lora:wght@500&display=swap" rel="stylesheet">
+
     <style>
-        /* Base Variables (Dark Theme - Default) */
+        /* --- ROOT VARIABLES & BASIC SETUP --- */
         :root {
-            --dark-bg: #1A1A1A; /* Deeper, sophisticated dark */
-            --card-bg: #282828; /* Slightly lighter for cards */
-            --color-text-primary: #FFFFFF; /* Pure white for main text, headings */
-            --color-text-secondary: #C0C0C0; /* Lighter gray for paragraphs, details */
-            --accent-blue: #007AFF; /* Apple-like blue accent */
-            --accent-gray: #404040; /* For subtle borders/dividers */
-            --shadow-color-rgb: 0, 0, 0; /* For box-shadow rgba */
-            --hover-card-bg: #333; /* Slightly lighter on hover */
-            --input-focus-bg: #383838;
+            /* Fonts */
+            --font-primary: 'Inter', sans-serif;
+            --font-accent: 'Lora', serif;
+
+            /* Light Mode Colors */
+            --bg-light: #F9F9F9;
+            --text-primary-light: #1d1d1f;
+            --text-secondary-light: #86868b;
+            --accent-light: #007AFF;
+            --border-light: #e0e0e0;
+
+            /* Dark Mode Colors */
+            --bg-dark: #121212;
+            --text-primary-dark: #EAEAEA;
+            --text-secondary-dark: #8D8D8D;
+            --accent-dark: #0A84FF;
+            --border-dark: #333333;
+            --card-bg-dark: #1e1e1e;
         }
 
-        /* Light Theme Variables */
-        body.light-theme {
-            --dark-bg: #F8F8F8; /* Very light gray background */
-            --card-bg: #FFFFFF; /* Pure white for cards */
-            --color-text-primary: #1A1A1A; /* Dark for main text, headings */
-            --color-text-secondary: #505050; /* Darker gray for paragraphs, details */
-            --accent-blue: #007AFF; /* Accent blue remains */
-            --accent-gray: #D0D0D0; /* Lighter gray for dividers */
-            --shadow-color-rgb: 0, 0, 0; /* For box-shadow rgba */
-            --hover-card-bg: #F0F0F0; /* Slightly darker on hover */
-            --input-focus-bg: #EFEFEF;
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--dark-bg); /* Solid dark background for simplicity */
-            color: var(--color-text-secondary); /* Default body text color */
-            overflow-x: hidden; /* Prevent horizontal scroll from animations */
-            line-height: 1.6; /* Improved readability */
-            transition: background-color 0.5s ease, color 0.5s ease; /* Smooth theme transition */
+            font-family: var(--font-primary);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
-        .container {
-            max-width: 1000px; /* Optimal width for readability */
-            margin: 2.5rem auto; /* More margin top/bottom */
-            padding: 4rem; /* Generous padding inside container */
-            background-color: var(--card-bg);
-            border-radius: 1.5rem; /* Softened corners */
-            box-shadow: 0 15px 30px rgba(var(--shadow-color-rgb), 0.4); /* Stronger but softer shadow */
-            border: 1px solid rgba(var(--color-text-primary), 0.08); /* Subtle light border */
-            transition: background-color 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+
+        .light-mode {
+            background-color: var(--bg-light);
+            color: var(--text-primary-light);
+            --bg-current: var(--bg-light);
+            --text-primary-current: var(--text-primary-light);
+            --text-secondary-current: var(--text-secondary-light);
+            --accent-current: var(--accent-light);
+            --border-current: var(--border-light);
+            --card-bg-current: #ffffff;
         }
-        h1, h2, h3 {
-            color: var(--color-text-primary);
-            font-weight: 700; /* Bolder headings */
-            letter-spacing: -0.02em; /* Tighter letter spacing for headings */
+
+        .dark-mode {
+            background-color: var(--bg-dark);
+            color: var(--text-primary-dark);
+            --bg-current: var(--bg-dark);
+            --text-primary-current: var(--text-primary-dark);
+            --text-secondary-current: var(--text-secondary-dark);
+            --accent-current: var(--accent-dark);
+            --border-current: var(--border-dark);
+            --card-bg-current: var(--card-bg-dark);
         }
-        h1 {
-            font-size: 4.5rem; /* Larger H1 */
-            font-weight: 900; /* Extra bold */
-            text-align: center;
-            margin-bottom: 0.5rem;
-            color: var(--color-text-primary); /* H1 in primary text color */
-            text-shadow: none; /* No explicit text shadow for H1 */
+
+        .content-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 40px;
         }
-        .header-subtitle {
-            font-size: 1.75rem; /* Larger subtitle */
-            font-weight: 600;
-            color: var(--color-text-secondary); /* Subtitle in secondary color */
-            text-align: center;
-            margin-bottom: 2.5rem;
-            animation: none !important; /* Remove glow pulse */
-        }
-        p {
-            color: var(--color-text-secondary); /* Default paragraph text color */
-            font-size: 1.05rem; /* Slightly larger paragraph text */
-        }
-        section {
-            margin-bottom: 4.5rem; /* More spacing between sections */
-            padding-bottom: 3.5rem;
-            border-bottom: 1px solid var(--accent-gray); /* Subtle section divider */
-        }
-        section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
+
         .section-title {
-            font-size: 3rem; /* Larger section titles */
-            font-weight: 800;
-            margin-bottom: 2.5rem;
+            font-family: var(--font-primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 60px;
+            text-align: center;
+            color: var(--text-primary-current);
+        }
+
+        /* --- HEADER & NAVIGATION --- */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: transparent;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .main-header.scrolled {
+            background-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .dark-mode .main-header.scrolled {
+            background-color: rgba(20, 20, 20, 0.7);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 40px;
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: var(--text-primary-current);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary-current);
+            font-size: 1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: var(--accent-current);
+        }
+
+        /* --- THEME TOGGLE --- */
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary-current);
+            padding: 5px;
+        }
+        .theme-toggle .icon-sun { display: none; }
+        .theme-toggle .icon-moon { display: block; }
+        .dark-mode .theme-toggle .icon-sun { display: block; }
+        .dark-mode .theme-toggle .icon-moon { display: none; }
+        .theme-toggle svg {
+            transition: transform 0.3s ease;
+        }
+        .theme-toggle:hover svg {
+            transform: scale(1.1) rotate(15deg);
+            color: var(--accent-current);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            color: var(--color-text-primary);
+            justify-content: center;
+            text-align: center;
+            padding: 0 40px;
         }
-        .section-title i {
-            color: var(--accent-blue); /* Icons in accent blue */
-            font-size: 2.8rem;
-            margin-right: 1rem;
-        }
-
-        .experience-item, .education-item, .contact-form-card {
-            margin-bottom: 2.5rem; /* More space for individual items */
-            padding: 2.5rem; /* Increased padding */
-            background-color: var(--dark-bg); /* Darker background for items */
-            border-radius: 1.25rem; /* Consistent rounding */
-            border: 1px solid rgba(var(--color-text-primary), 0.05); /* Very subtle border */
-            transition: all 0.4s cubic-bezier(0.2, 0.0, 0, 1.0); /* Smoother, faster bezier */
-            box-shadow: 0 10px 25px rgba(var(--shadow-color-rgb), 0.3); /* Softer initial shadow */
-        }
-        .experience-item:hover, .education-item:hover, .contact-form-card:hover {
-            box-shadow: 0 20px 40px rgba(var(--shadow-color-rgb), 0.5); /* More pronounced on hover */
-            transform: translateY(-8px); /* Subtle lift */
-            background-color: var(--hover-card-bg); /* Slightly lighter on hover */
-        }
-        .item-title {
-            font-size: 1.75rem; /* Larger item titles */
+        .hero-headline {
+            font-family: var(--font-primary);
+            font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 700;
-            color: var(--color-text-primary);
-            margin-bottom: 0.5rem;
+            line-height: 1.1;
+            color: var(--text-primary-current);
+            animation: fadeIn 1s 0.2s both;
         }
-        .item-meta {
-            color: var(--accent-blue); /* Meta in accent blue */
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-            font-weight: 500;
-        }
-        .item-context, .item-stack {
-            color: var(--color-text-secondary); /* Context and stack text color */
-            font-size: 1rem;
-            margin-bottom: 0.75rem;
-        }
-        .item-context .label-bold, .item-stack .label-bold {
-            color: var(--color-text-primary); /* Bold labels in primary color */
-            font-weight: 600;
-        }
-        .item-details ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 1rem;
-        }
-        .item-details ul li {
-            color: var(--color-text-secondary); /* List items in secondary color */
-            font-size: 1rem;
-            line-height: 1.8; /* More spacious list items */
-            position: relative;
-            padding-left: 1.5rem; /* Space for custom bullet */
-        }
-        .item-details ul li:before {
-            content: ""; /* Empty content for custom bullet */
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 8px; /* Small square bullet */
-            height: 8px;
-            background-color: var(--accent-blue);
-            border-radius: 2px; /* Slightly rounded square */
-        }
-
-        .icon-link {
-            transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
-            color: var(--color-text-secondary); /* Icons initially muted */
-            font-size: 1.2rem;
-        }
-        .icon-link span {
-            color: var(--color-text-primary); /* Text in primary color */
-        }
-        .icon-link i {
-            color: var(--accent-blue); /* Icon part in accent blue */
-        }
-        .icon-link:hover {
-            color: var(--accent-blue); /* Entire link turns blue on hover */
-            transform: translateY(-3px); /* Subtle lift on hover */
-        }
-        .icon-link:hover i {
-            color: var(--accent-blue); /* Icon stays blue or gets more intense */
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        .skill-category-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--color-text-primary);
-            margin-bottom: 1rem;
-        }
-        .skill-badge {
-            background-color: rgba(0, 122, 255, 0.15); /* Lighter transparent blue */
-            color: var(--accent-blue);
-            padding: 0.4rem 0.8rem; /* Reduced padding */
-            border-radius: 0.4rem; /* Slightly less rounded */
-            font-size: 0.8rem; /* Reduced font size */
-            font-weight: 600;
-            margin: 0.3rem; /* Reduced margin */
+        .hero-headline span {
             display: inline-block;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            cursor: pointer;
-            border: 1px solid rgba(0, 122, 255, 0.3);
+            animation: fadeInUp 1s 0.5s both;
         }
-        .skill-badge:hover {
-            background-color: var(--accent-blue);
-            color: white;
-            transform: translateY(-2px) scale(1.03); /* Subtle lift and scale */
+        .hero-headline span:last-child {
+            animation-delay: 0.7s;
         }
 
-        /* Animations */
-        @keyframes fadeInSlideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-secondary-current);
+            animation: fadeIn 1s 1.5s both;
+            font-size: 0.8rem;
         }
+        .scroll-indicator .arrow {
+            animation: bounce 2s infinite;
+        }
+
+        /* --- WORK SECTION --- */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+        .project-card {
+            background: var(--card-bg-current);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            text-decoration: none;
+            color: var(--text-primary-current);
+        }
+        .dark-mode .project-card {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .dark-mode .project-card:hover {
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .project-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-content {
+            padding: 25px;
+        }
+        .card-content h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.5rem;
+        }
+        .card-content p {
+            margin: 0;
+            color: var(--text-secondary-current);
+            font-size: 1rem;
+        }
+
+        .project-button {
+            background: var(--accent-current);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .project-card:hover .project-button {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- ABOUT SECTION --- */
+        .about-content {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+        }
+        .about-image {
+            flex: 1;
+            max-width: 400px;
+        }
+        .about-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .about-text {
+            flex: 1.5;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-secondary-current);
+        }
+        .about-text p {
+            margin: 0 0 20px 0;
+        }
+
+        /* --- SKILLS SECTION --- */
+        .skills-list {
+            list-style: none;
+            padding: 0;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .skills-list li {
+            font-size: 1.5rem;
+            font-weight: 500;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-current);
+            transition: color 0.3s ease;
+        }
+        .skills-list li:last-child {
+            border-bottom: none;
+        }
+        .skills-list li:hover {
+            color: var(--accent-current);
+        }
+
+        /* --- CONTACT/FOOTER SECTION --- */
+        .contact-section {
+            background-color: var(--card-bg-current);
+            padding: 100px 40px;
+            text-align: center;
+            transition: background-color 0.4s ease;
+        }
+        .contact-headline {
+            font-family: var(--font-primary);
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+        .contact-email {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: var(--accent-current);
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+        }
+        .contact-email::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-current);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        .contact-email:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .social-links {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        .social-links a {
+            text-decoration: none;
+            color: var(--text-secondary-current);
+            font-weight: 500;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .social-links a:hover {
+            color: var(--accent-current);
+            transform: translateY(-3px);
+        }
+
+        /* --- ANIMATIONS --- */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
-        .animated-header.is-visible { animation: fadeIn 1.2s ease-out forwards; }
-        .animated-section.is-visible { animation: fadeInSlideUp 1.2s cubic-bezier(0.2, 0.0, 0, 1.0) forwards; } /* Smooth slide up */
-        .animated-element.is-visible { animation: fadeInSlideUp 0.8s cubic-bezier(0.2, 0.0, 0, 1.0) forwards; } /* Staggered effect */
-
-        /* Ensure elements are hidden before animation */
-        .animated-section, .animated-header, .animated-element { opacity: 0; }
-
-        /* Contact Form Specific Styles */
-        .form-group {
-            margin-bottom: 1.8rem;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .form-group label {
-            color: var(--color-text-primary);
-            font-size: 1rem;
-            margin-bottom: 0.75rem;
-            display: block;
-            font-weight: 600;
-        }
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            border: 1px solid var(--accent-gray);
-            border-radius: 0.6rem;
-            background-color: var(--dark-bg); /* Use dark-bg for inputs */
-            font-size: 1rem;
-            color: var(--color-text-primary);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-        }
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3); /* Softer blue glow */
-            background-color: var(--input-focus-bg); /* Slightly lighter on focus */
-        }
-        .submit-button {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background-color: var(--accent-blue); /* Solid blue button */
-            color: white;
-            font-weight: 700;
-            border-radius: 0.75rem;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3);
-        }
-        .submit-button:hover {
-            background-color: #005BB5; /* Darker blue on hover */
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(0, 122, 255, 0.4);
-        }
-        .submit-button::after { /* Removed shimmer effect for Apple style */
-            content: none;
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
         }
 
-        .contact-message {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            border-radius: 0.6rem;
-            text-align: center;
-            font-size: 0.95rem;
-            transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
-        }
-        .contact-message.success {
-            background-color: rgba(76, 175, 80, 0.2); /* Green tint */
-            color: #4CAF50;
-            border: 1px solid rgba(76, 175, 80, 0.4);
-        }
-        .contact-message.error {
-            background-color: rgba(244, 67, 54, 0.2); /* Red tint */
-            color: #F44336;
-            border: 1px solid rgba(244, 67, 54, 0.4);
-        }
-        .scroll-to-top {
-            position: fixed;
-            bottom: 2.5rem;
-            right: 2.5rem;
-            background-color: #333; /* Darker for the button */
-            color: white;
-            padding: 1rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            font-size: 1.5rem;
-            box-shadow: 0 5px 15px rgba(var(--shadow-color-rgb), 0.3);
-            cursor: pointer;
+        /* Scroll-triggered animations */
+        .animate-on-scroll {
             opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            border: 1px solid rgba(var(--color-text-primary), 0.1); /* Subtle border */
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
-        .scroll-to-top.show {
+        .animate-on-scroll.is-visible {
             opacity: 1;
-            visibility: visible;
-            transform: translateY(-5px);
+            transform: translateY(0);
         }
-        .scroll-to-top:hover {
-            background-color: var(--accent-blue); /* Blue on hover */
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(var(--shadow-color-rgb), 0.4);
-        }
+        /* Staggered animations */
+        .project-card.is-visible:nth-child(2) { transition-delay: 0.1s; }
+        .project-card.is-visible:nth-child(3) { transition-delay: 0.2s; }
+        .project-card.is-visible:nth-child(4) { transition-delay: 0.3s; }
+        .skills-list li.is-visible:nth-child(1) { transition-delay: 0.1s; }
+        .skills-list li.is-visible:nth-child(2) { transition-delay: 0.2s; }
+        .skills-list li.is-visible:nth-child(3) { transition-delay: 0.3s; }
+        .skills-list li.is-visible:nth-child(4) { transition-delay: 0.4s; }
+        .skills-list li.is-visible:nth-child(5) { transition-delay: 0.5s; }
 
-        /* Theme Toggle Button */
-        .theme-toggle-button {
-            position: absolute;
-            top: 2.5rem;
-            right: 2.5rem;
-            background-color: var(--dark-bg);
-            color: var(--color-text-secondary);
-            border: 1px solid var(--accent-gray);
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(var(--shadow-color-rgb), 0.2);
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        .theme-toggle-button:hover {
-            background-color: var(--hover-card-bg);
-            color: var(--color-text-primary);
-            box-shadow: 0 8px 20px rgba(var(--shadow-color-rgb), 0.3);
-            transform: translateY(-2px);
-        }
-        .theme-toggle-button i {
-            color: var(--accent-blue);
-            transition: color 0.3s ease;
-        }
-        .theme-toggle-button:hover i {
-            color: var(--accent-blue);
-        }
 
-        /* Responsive adjustments for toggle button */
+        /* --- RESPONSIVENESS --- */
         @media (max-width: 768px) {
-            .theme-toggle-button {
-                top: 1.5rem;
-                right: 1.5rem;
-                padding: 0.5rem 0.75rem;
-                font-size: 0.8rem;
+            .content-section {
+                padding: 80px 20px;
             }
-            .theme-toggle-button i {
-                font-size: 1.2rem;
+            .about-content {
+                flex-direction: column;
             }
-            .container {
-                padding: 2.5rem 1.5rem;
-                margin: 1.5rem auto;
+            .project-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
             }
-            h1 {
-                font-size: 3rem;
-            }
-            .header-subtitle {
-                font-size: 1.25rem;
-            }
-            .section-title {
-                font-size: 2rem;
-                margin-bottom: 1.5rem;
-            }
-            .section-title i {
-                font-size: 2rem;
-            }
-            .experience-item, .education-item, .contact-form-card {
-                padding: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-            .item-title {
-                font-size: 1.4rem;
-            }
-            .item-details ul li {
-                font-size: 0.95rem;
-            }
-            .form-group label, .form-group input, .form-group textarea, .submit-button {
-                font-size: 0.95rem;
-                padding: 0.8rem 1rem;
-            }
-            .submit-button {
-                padding: 0.8rem 2rem;
-            }
-            .scroll-to-top {
-                bottom: 1.5rem;
-                right: 1.5rem;
-                width: 45px;
-                height: 45px;
-                font-size: 1.3rem;
+            .main-nav {
+                padding: 15px 20px;
             }
         }
     </style>
 </head>
-<body class="antialiased">
-    <div class="container relative">
-        <!-- Theme Toggle Button -->
-        <button id="theme-toggle" class="theme-toggle-button">
-            <i class="fas fa-sun" id="theme-toggle-icon"></i>
-            <span id="theme-toggle-text">Thème Clair</span>
-        </button>
+<body class="light-mode">
 
-        <!-- Section: En-tête -->
-        <header class="text-center pb-8 border-b border-gray-200 mb-8 animated-header">
-            <h1 class="font-extrabold leading-tight">ROVA RANAIVO</h1>
-            <p class="header-subtitle">Développeur Fullstack Angular/React/NodeJS</p>
+    <header class="main-header">
+        <nav class="main-nav">
+            <a href="#" class="nav-logo">JD</a>
+            <ul class="nav-links">
+                <li><a href="#work">Work</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-sun"><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/><circle cx="12" cy="12" r="5"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+            </button>
+        </nav>
+    </header>
 
-            <div class="flex flex-wrap justify-center gap-x-8 gap-y-4 text-xl">
-                <a href="tel:+23054886845" class="icon-link flex items-center space-x-2">
-                    <i class="fas fa-phone-alt"></i>
-                    <span>+230 54 88 68 45</span>
+    <main>
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-headline">
+                    <span>John Doe.</span><br>
+                    <span>Creative Developer & Designer.</span>
+                </h1>
+                <div class="scroll-indicator">
+                    <p>Scroll Down</p>
+                    <div class="arrow">↓</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="work" class="work-section content-section">
+            <h2 class="section-title">Selected Work</h2>
+            <div class="project-grid">
+                <a href="#" class="project-card animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=2072&auto=format&fit=crop" alt="Project 1 Thumbnail">
+                    <div class="card-content">
+                        <h3>Project One</h3>
+                        <p>UI/UX Design for a new startup</p>
+                        <div class="project-button">View Project</div>
+                    </div>
                 </a>
-                <a href="mailto:rovaranaivo@outlook.com" class="icon-link flex items-center space-x-2">
-                    <i class="fas fa-envelope"></i>
-                    <span>rovaranaivo@outlook.com</span>
+                <a href="#" class="project-card animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=2070&auto=format&fit=crop" alt="Project 2 Thumbnail">
+                    <div class="card-content">
+                        <h3>Project Two</h3>
+                        <p>Full-stack web application</p>
+                        <div class="project-button">View Project</div>
+                    </div>
                 </a>
-                <a href="https://www.linkedin.com/in/rova-ranaivo/" target="_blank" rel="noopener noreferrer" class="icon-link flex items-center space-x-2">
-                    <i class="fab fa-linkedin"></i>
-                    <span>LinkedIn</span>
+                <a href="#" class="project-card animate-on-scroll">
+                     <img src="https://images.unsplash.com/photo-1559028006-44a13e140e1f?q=80&w=1974&auto=format&fit=crop" alt="Project 3 Thumbnail">
+                    <div class="card-content">
+                        <h3>Project Three</h3>
+                        <p>Branding and identity design</p>
+                        <div class="project-button">View Project</div>
+                    </div>
                 </a>
-                <a href="https://github.com/rova-ranaivo" target="_blank" rel="noopener noreferrer" class="icon-link flex items-center space-x-2">
-                    <i class="fab fa-github"></i>
-                    <span>GitHub</span>
+                <a href="#" class="project-card animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop" alt="Project 4 Thumbnail">
+                    <div class="card-content">
+                        <h3>Project Four</h3>
+                        <p>Motion graphics for a marketing campaign</p>
+                        <div class="project-button">View Project</div>
+                    </div>
                 </a>
-                <a href="https://dev.to/aivo" target="_blank" rel="noopener noreferrer" class="icon-link flex items-center space-x-2">
-                    <i class="fab fa-dev"></i>
-                    <span>DEV.to</span>
-                </a>
             </div>
-        </header>
-
-        <!-- Section: Profil -->
-        <section class="animated-section">
-            <h2 class="section-title">
-                <i class="fas fa-user-circle"></i>
-                <span>Profil</span>
-            </h2>
-            <p class="leading-relaxed text-lg">
-                Avec plus de 5 ans d'expérience en développement web, je maîtrise une large gamme de technologies front-end et back-end.
-                Mon expertise récente se concentre sur l'évolution et la maintenance d'applications d'envergure,
-                en collaboration avec des équipes multidisciplinaires.
-                Je suis passionné par la qualité du code, son évolutivité et m'adapte rapidement aux différentes méthodologies de projet.
-            </p>
         </section>
 
-        <!-- Section: Compétences techniques -->
-        <section class="animated-section">
-            <h2 class="section-title">
-                <i class="fas fa-code"></i>
-                <span>Compétences techniques</span>
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="animated-element">
-                    <h3 class="skill-category-title">Langages</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-badge">Javascript</span>
-                        <span class="skill-badge">Typescript</span>
-                        <span class="skill-badge">HTML5/CSS3</span>
-                        <span class="skill-badge">PHP</span>
-                        <span class="skill-badge">Java</span>
-                        <span class="skill-badge">C#</span>
-                    </div>
+        <section id="about" class="about-section content-section">
+            <h2 class="section-title animate-on-scroll">About Me</h2>
+            <div class="about-content">
+                <div class="about-image animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop" alt="A professional photo of John Doe">
                 </div>
-                <div class="animated-element">
-                    <h3 class="skill-category-title">Front-End</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-badge">React</span>
-                        <span class="skill-badge">Angular (Rxjs, Ngrx, Angular Material)</span>
-                        <span class="skill-badge">SASS</span>
-                        <span class="skill-badge">SCSS</span>
-                        <span class="skill-badge">BEM</span>
-                        <span class="skill-badge">Ajax</span>
-                        <span class="skill-badge">JQuery</span>
-                    </div>
-                </div>
-                <div class="animated-element">
-                    <h3 class="skill-category-title">Back-End</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-badge">NodeJS</span>
-                        <span class="skill-badge">ExpressJS</span>
-                        <span class="skill-badge">NestJS</span>
-                        <span class="skill-badge">NextJS</span>
-                        <span class="skill-badge">CodeIgniter</span>
-                    </div>
-                </div>
-                <div class="animated-element">
-                    <h3 class="skill-category-title">Base de données</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-badge">MongoDB</span>
-                        <span class="skill-badge">Oracle</span>
-                        <span class="skill-badge">MySQL</span>
-                        <span class="skill-badge">PostgreSQL</span>
-                    </div>
-                </div>
-                <div class="animated-element">
-                    <h3 class="skill-category-title">Méthodologie</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-badge">Agile</span>
-                        <span class="skill-badge">Scrum</span>
-                        <span class="skill-badge">Kanban</span>
-                    </div>
-                </div>
-                <div class="animated-element">
-                    <h3 class="skill-category-title">Outils</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-badge">Slack</span>
-                        <span class="skill-badge">Skype</span>
-                        <span class="skill-badge">Google suite</span>
-                        <span class="skill-badge">Gather</span>
-                        <span class="skill-badge">Teams</span>
-                        <span class="skill-badge">Git</span>
-                        <span class="skill-badge">SVN</span>
-                        <span class="skill-badge">Jira</span>
-                        <span class="skill-badge">Service Now</span>
-                        <span class="skill-badge">BitBucket</span>
-                        <span class="skill-badge">Confluence</span>
-                        <span class="skill-badge">Github</span>
-                        <span class="skill-badge">Gitlab</span>
-                        <span class="skill-badge">Postman</span>
-                        <span class="skill-badge">Thunder</span>
-                        <span class="skill-badge">Monorepo</span>
-                        <span class="skill-badge">Nx Tool</span>
-                        <span class="skill-badge">Prettier</span>
-                        <span class="skill-badge">Linter</span>
-                        <span class="skill-badge">Canva</span>
-                        <span class="skill-badge">Figma</span>
-                        <span class="skill-badge">PixelPerfect</span>
-                        <span class="skill-badge">Webflow</span>
-                    </div>
+                <div class="about-text animate-on-scroll">
+                    <p>I am a passionate designer and developer with a knack for creating beautiful, functional, and user-centered digital experiences. With over 5 years of experience in the field, I love turning complex problems into simple, elegant solutions.</p>
+                    <p>When I'm not coding or designing, you can find me exploring new coffee shops or hiking in the mountains.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Section: Expérience professionnelle -->
-        <section class="animated-section">
-            <h2 class="section-title">
-                <i class="fas fa-briefcase"></i>
-                <span>Expérience professionnelle</span>
-            </h2>
-
-            <div class="experience-item animated-element">
-                <h3 class="item-title">Développeur frontend, Novity Consulting - Maurice</h3>
-                <p class="item-meta">05/2022 - présent</p>
-                <p class="item-context">
-                    <span class="label-bold">Contexte :</span> Support Dev sur une application dédiée à simplifier les formalités administratives post-décès.
-                </p>
-                <p class="item-stack">
-                    <span class="label-bold">Stack :</span> Typescript, Angular, SCSS, API REST, Hypermedia, Angular Material, JEST, GIT, Confluence, JIRA, BEM, Monorepo
-                </p>
-                <div class="item-details">
-                    <ul>
-                        <li>Refactor du code legacy pour améliorer la maintenabilité et préparer l'intégration de nouvelles fonctionnalités</li>
-                        <li>Collaboration à la documentation du projet avec Confluence</li>
-                        <li>Développement d'une suite de tests automatisés, couvrant plus de 80% du projet avec Jest.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="experience-item animated-element">
-                <h3 class="item-title">Développeur frontend, Digital Fourteen Ltd - Maurice</h3>
-                <p class="item-meta">07/2021 - 03/2022</p>
-                <p class="item-context">
-                    <span class="label-bold">Contexte :</span> Maintenance et optimisation d'un constructeur de contenu web conforme aux standards d'accessibilité numérique.
-                </p>
-                <p class="item-stack">
-                    <span class="label-bold">Stack :</span> Typescript, Angular, API REST, SCSS, BEM, GIT, JIRA
-                </p>
-                <div class="item-details">
-                    <ul>
-                        <li>Travailler en étroite collaboration avec les équipes de design pour convertir les maquettes en code opérationnel</li>
-                        <li>Collaboration avec les équipes QA, PO & Dev pour élaborer des solutions technico-fonctionnelles</li>
-                        <li>Refonte du code existant pour améliorer sa maintenabilité</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="experience-item animated-element">
-                <h3 class="item-title">Développeur frontend, Proximity BBDO - Maurice</h3>
-                <p class="item-meta">10/2019 - 06/2021</p>
-                <p class="item-context">
-                    <span class="label-bold">Contexte :</span> Refonte d'un site d'une envergure internationale sur les technologies récentes.
-                </p>
-                <p class="item-stack">
-                    <span class="label-bold">Stack :</span> Typescript, React, GraphQL, Git, Jira, Storybook, NextJS
-                </p>
-                <div class="item-details">
-                    <ul>
-                        <li>Développer des composants d'interfaces avec React et Next.js.</li>
-                        <li>Transformer les maquettes des pages et des composants de la totalité du site en code fonctionnel (avec l'outil Perfect Pixel)</li>
-                        <li>Écriture et maintenance d'une suite de tests unitaires avec Jest sur la totalité du projet</li>
-                        <li>Utilisation de Storybook pour visualiser, tester et documenter chacun des composants</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="experience-item animated-element">
-                <h3 class="item-title">Développeur fullstack, Easytech - Madagascar</h3>
-                <p class="item-meta">02/2018 - 10/2019</p>
-                <p class="item-context">
-                    <span class="label-bold">Contexte :</span> Conception et développement d'une application de suivi des tâches des techniciens d'un service Helpdesk.
-                </p>
-                <p class="item-stack">
-                    <span class="label-bold">Stack :</span> PHP, Javascript, Ajax, JQuery, MySQL, Git, Codeigniter
-                </p>
-                <div class="item-details">
-                    <ul>
-                        <li>Collaborer étroitement avec les utilisateurs finaux pour établir les spécifications du projet et avoir des retours rapides sur les fonctionnalités</li>
-                        <li>Conception et développement de l'application</li>
-                        <li>Participation à la rédaction de la documentation et à la formation de l'équipe pour faciliter leur appropriation du projet</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="experience-item animated-element">
-                <h3 class="item-title">IT Consultant - Madagascar</h3>
-                <p class="item-meta">10/2018 - 10/2021</p>
-                <p class="item-context">
-                    <span class="label-bold">Contexte :</span> Développement et conception d'une application backoffice pour la gestion de caisse et de stock d'une pharmacie
-                </p>
-                <p class="item-stack">
-                    <span class="label-bold">Stack :</span> Java, JSP, MySQL, JQuery, Ajax, Javascript
-                </p>
-                <div class="item-details">
-                    <ul>
-                        <li>Participation aux choix des technologies utilisées et à la conception de l'application</li>
-                        <li>Collaboration à la mise en place de la base de données</li>
-                        <li>Développement et maintenance de l'application</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="experience-item animated-element">
-                <h3 class="item-title">Développeur fullstack (Stage), BOA Madagascar</h3>
-                <p class="item-meta">03/2016 - 09/2016</p>
-                <p class="item-context">
-                    <span class="label-bold">Contexte :</span> Conception et développement d'une application web pour le suivi des courriers retournés par leur destinataire.
-                </p>
-                <p class="item-stack">
-                    <span class="label-bold">Stack :</span> PHP, Javascript, Ajax, JQuery, MySQL, Git, Codeigniter, Oracle
-                </p>
-                <div class="item-details">
-                    <ul>
-                        <li>Conception de l'application et de la base de données</li>
-                        <li>Collaboration avec l'équipe Dev pour la livraison d'une application entièrement fonctionnelle à la fin du stage</li>
-                        <li>Documentation de l'application et formation des utilisateurs</li>
-                        <li>Création d'une interface intuitive et innovante adaptée en respectant les normes de l'entreprise pour une prise en main facile</li>
-                    </ul>
-                </div>
-            </div>
+        <section id="skills" class="skills-section content-section">
+            <h2 class="section-title animate-on-scroll">Skills & Services</h2>
+            <ul class="skills-list">
+                <li class="animate-on-scroll">UI/UX Design</li>
+                <li class="animate-on-scroll">Web Development</li>
+                <li class="animate-on-scroll">Motion Graphics</li>
+                <li class="animate-on-scroll">Branding & Identity</li>
+                <li class="animate-on-scroll">Frontend Architecture</li>
+            </ul>
         </section>
 
-        <!-- Section: Éducation -->
-        <section class="animated-section">
-            <h2 class="section-title">
-                <i class="fas fa-graduation-cap"></i>
-                <span>Éducation</span>
-            </h2>
-            <div class="education-item animated-element">
-                <h3 class="item-title">Master 2 - MIAGE MBDS</h3>
-                <p class="item-meta">2021-2022</p>
-                <p>Université Côte d'Azur, France</p>
+        <footer id="contact" class="contact-section">
+            <div class="contact-content">
+                <h2 class="contact-headline animate-on-scroll">Let's build something great.</h2>
+                <a href="mailto:hello@johndoe.com" class="contact-email animate-on-scroll">hello@johndoe.com</a>
+                <div class="social-links animate-on-scroll">
+                    <a href="#">LinkedIn</a>
+                    <a href="#">GitHub</a>
+                    <a href="#">Twitter</a>
+                </div>
             </div>
-            <div class="education-item animated-element">
-                <h3 class="item-title">Licence - Développement web</h3>
-                <p class="item-meta">2013-2016</p>
-                <p>IT University Madagascar</p>
-            </div>
-        </section>
-
-        <!-- Section: Centres d'intérêt & Langues -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-12 animated-section">
-            <div class="animated-element">
-                <h2 class="section-title">
-                    <i class="fas fa-heart"></i>
-                    <span>Centres d'intérêt</span>
-                </h2>
-                <ul class="text-lg space-y-2">
-                    <li>Lecture</li>
-                    <li>Théâtre</li>
-                    <li>Nage</li>
-                </ul>
-            </div>
-            <div class="animated-element">
-                <h2 class="section-title">
-                    <i class="fas fa-language"></i>
-                    <span>Langues</span>
-                </h2>
-                <ul class="text-lg space-y-2">
-                    <li>Français</li>
-                    <li>Anglais</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Section: Me Contacter -->
-        <section class="animated-section">
-            <h2 class="section-title">
-                <i class="fas fa-envelope-open-text"></i>
-                <span>Me Contacter</span>
-            </h2>
-            <div class="contact-form-card animated-element">
-                <form id="contact-form" action="#" method="POST" class="space-y-7">
-                    <p class="text-center text-lg">
-                        N'hésitez pas à me contacter pour toute opportunité ou question.
-                    </p>
-                    <div class="form-group">
-                        <label for="name">Nom</label>
-                        <input type="text" id="name" name="name" placeholder="Votre nom" required class="w-full">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Votre email" required class="w-full">
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Sujet</label>
-                        <input type="text" id="subject" name="subject" placeholder="Sujet du message" required class="w-full">
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="7" placeholder="Votre message" required class="w-full"></textarea>
-                    </div>
-                    <div class="text-center pt-3">
-                        <button type="submit" class="submit-button">Envoyer le message</button>
-                    </div>
-                    <div id="contact-message" class="contact-message hidden mt-5"></div>
-                </form>
-                <p class="text-gray-500 text-sm text-center mt-7">
-                    Note: Ce formulaire est un exemple visuel. Pour envoyer un email, une intégration backend est nécessaire.
-                </p>
-            </div>
-        </section>
-
-        <footer class="text-center text-gray-500 text-sm pt-8 mt-8 border-t border-gray-700">
-            <p>&copy; <span id="current-year"></span> ROVA RANAIVO. Tous droits réservés.</p>
         </footer>
-    </div>
 
-    <!-- Scroll to Top Button -->
-    <div id="scrollToTopBtn" class="scroll-to-top">
-        <i class="fas fa-arrow-up"></i>
-    </div>
+    </main>
 
     <script>
-        // Set current year dynamically for the footer
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+        document.addEventListener('DOMContentLoaded', () => {
 
-        // Theme Toggle Logic
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeToggleIcon = document.getElementById('theme-toggle-icon');
-        const themeToggleText = document.getElementById('theme-toggle-text');
-        const body = document.body;
+            // --- THEME TOGGLER ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
 
-        // Function to apply theme
-        function applyTheme(theme) {
-            if (theme === 'light') {
-                body.classList.add('light-theme');
-                themeToggleIcon.classList.remove('fa-sun');
-                themeToggleIcon.classList.add('fa-moon');
-                themeToggleText.textContent = 'Thème Sombre';
+            // Check for saved theme in localStorage and set it on page load
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.classList.replace('light-mode', 'dark-mode');
             } else {
-                body.classList.remove('light-theme');
-                themeToggleIcon.classList.remove('fa-moon');
-                themeToggleIcon.classList.add('fa-sun');
-                themeToggleText.textContent = 'Thème Clair';
+                 body.classList.replace('dark-mode', 'light-mode');
             }
-        }
 
-        // Load saved theme from localStorage or default to dark
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        applyTheme(savedTheme);
-
-        // Toggle theme on button click
-        themeToggleBtn.addEventListener('click', () => {
-            let currentTheme = body.classList.contains('light-theme') ? 'light' : 'dark';
-            let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            applyTheme(newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
-
-
-        // Intersection Observer for animations
-        const sections = document.querySelectorAll('.animated-section');
-        const header = document.querySelector('.animated-header');
-
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1 // Trigger when 10% of the element is visible
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    if (entry.target.classList.contains('animated-header')) {
-                        entry.target.classList.add('is-visible');
-                    } else if (entry.target.classList.contains('animated-section')) {
-                        entry.target.classList.add('is-visible');
-                        // Stagger animation for children of animated-section
-                        Array.from(entry.target.querySelectorAll('.animated-element')).forEach((child, index) => {
-                            if (!child.classList.contains('is-visible')) {
-                                setTimeout(() => {
-                                    child.classList.add('is-visible');
-                                }, index * 100); // 100ms delay per element
-                            }
-                        });
-                    }
-                    // Only unobserve sections and the header directly
-                    if (!entry.target.classList.contains('animated-element')) {
-                         observer.unobserve(entry.target);
-                    }
+            themeToggle.addEventListener('click', () => {
+                if (body.classList.contains('light-mode')) {
+                    body.classList.replace('light-mode', 'dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    body.classList.replace('dark-mode', 'light-mode');
+                    localStorage.setItem('theme', 'light');
                 }
             });
-        }, observerOptions);
 
-        // Observe the header and sections
-        observer.observe(header);
-        sections.forEach(section => {
-            observer.observe(section);
-        });
-
-
-        // Handle contact form submission (for demo purposes)
-        const contactForm = document.getElementById('contact-form');
-        const contactMessageDiv = document.getElementById('contact-message');
-
-        contactForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent actual form submission
-
-            // Simulate form submission success/failure
-            const success = Math.random() > 0.5; // 50% chance of success
-
-            contactMessageDiv.classList.remove('hidden', 'success', 'error');
-
-            if (success) {
-                contactMessageDiv.classList.add('success');
-                contactMessageDiv.textContent = 'Votre message a été envoyé avec succès ! Je vous répondrai bientôt.';
-                contactForm.reset(); // Clear the form
-            } else {
-                contactMessageDiv.classList.add('error');
-                contactMessageDiv.textContent = 'Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer.';
-            }
-            contactMessageDiv.classList.remove('hidden');
-
-            // Hide message after a few seconds
-            setTimeout(() => {
-                contactMessageDiv.classList.add('hidden');
-            }, 5000);
-        });
-
-        // Scroll to Top functionality
-        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
-
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) { // Show button after scrolling 300px
-                scrollToTopBtn.classList.add('show');
-            } else {
-                scrollToTopBtn.classList.remove('show');
-            }
-        });
-
-        scrollToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+            // --- NAVBAR SCROLL EFFECT ---
+            const header = document.querySelector('.main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
             });
+
+            // --- SCROLL-TRIGGERED ANIMATIONS ---
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        // Optional: Unobserve after animation to save resources
+                        // observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1 // Trigger when 10% of the element is visible
+            });
+
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+
         });
     </script>
 </body>
