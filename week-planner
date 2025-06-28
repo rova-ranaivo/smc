@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Task Calendar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Custom scrollbar for task panel */
+        .task-panel-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .task-panel-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .task-panel-content::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .task-panel-content::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div id="app-container" class="bg-gray-50 min-h-screen font-sans p-4 sm:p-6 lg:p-8">
+        <header class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 text-center">Weekly Planner</h1>
+            <p class="text-center text-gray-500 mt-1">Organize your week with ease.</p>
+        </header>
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Task Panel -->
+            <div id="task-panel-container" class="w-full md:w-80 lg:w-96 flex-shrink-0 bg-white rounded-2xl shadow-lg p-6 flex flex-col transition-all duration-300">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Task List</h2>
+                <div id="task-panel-content" class="flex-grow overflow-y-auto pr-2 -mr-2 task-panel-content">
+                    <!-- Tasks will be injected here -->
+                </div>
+                <button id="add-task-btn" class="mt-6 w-full flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 ease-in-out transform hover:-translate-y-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                    <span class="ml-2">Add New Task</span>
+                </button>
+            </div>
+
+            <!-- Calendar Grid -->
+            <main id="calendar-grid" class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-6">
+                <!-- Day columns will be injected here -->
+            </main>
+        </div>
+    </div>
+
+    <script type="module">
+        // --- Configuration and State ---
+        let tasks = [
+            { id: 'task-1', title: 'Walk the dog', notes: 'Morning walk in the park.', color: 'bg-blue-300', day: 'Monday', createdAt: new Date().toISOString() },
+            { id: 'task-2', title: 'Grocery Shopping', notes: '', color: 'bg-green-300', day: 'Wednesday', createdAt: new Date().toISOString() },
+            { id: 'task-3', title: 'Team Meeting', notes: 'Discuss Q3 results.', color: 'bg-yellow-300', day: null, createdAt: new Date().toISOString() }
+        ];
+        let expandedTaskId = null;
+
+        const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const COLORS = ['bg-blue-300', 'bg-green-300', 'bg-yellow-300', 'bg-red-300', 'bg-purple-300', 'bg-pink-300', 'bg-indigo-300'];
+
+        // --- DOM Element References ---
+        const taskPanelContainer = document.getElementById('task-panel-container');
+        const taskPanelContent = document.getElementById('task-panel-content');
+        const calendarGrid = document.getElementById('calendar-grid');
+        const addTaskBtn = document.getElementById('add-task-btn');
+
+        // --- Local Data Operations ---
+        const handleUpdateTask = (taskId, updates) => {
+            const taskIndex = tasks.findIndex(t => t.id === taskId);
+            if (taskIndex !== -1) {
+                tasks[taskIndex] = { ...tasks[taskIndex], ...updates };
+                renderApp();
+            }
+        };
+
+        const handleDeleteTask = (taskId) => {
+            tasks = tasks.filter(t => t.id !== taskId);
+            if (expandedTaskId === taskId) {
+                expandedTaskId = null;
+            }
+            renderApp();
+        };
+
+        const handleAddTask = () => {
+            const newTask = {
+                id: `task-${Date.now()}`,
+                title: 'New Task',
+                notes: '',
+                color: 'bg-white',
+                day: null,
+                createdAt: new Date().toISOString(),
+            };
+            tasks.push(newTask);
+            renderApp();
+        };
+        
+        // --- UI Rendering ---
+
+        function createTaskCard(task) {
+            const card = document.createElement('div');
+            card.className = `p-3 rounded-lg shadow-md mb-3 transition-all duration-300 ease-in-out cursor-grab ${task.color || 'bg-white'}`;
+            card.setAttribute('draggable', true);
+            card.dataset.taskId = task.id;
+
+            let isEditing = false;
+            const isExpanded = expandedTaskId === task.id;
+
+            if (isExpanded) {
+                 card.classList.add('shadow-xl');
+            }
+
+            card.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('taskId', task.id);
+                e.dataTransfer.effectAllowed = 'move';
+            });
+            
+            const renderContent = () => {
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        ${isEditing ? `
+                            <input type="text" value="${task.title}" class="w-full bg-transparent text-gray-800 font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1 -ml-1" autofocus />
+                        ` : `
+                            <h4 class="font-semibold text-gray-800 flex-grow cursor-pointer">${task.title}</h4>
+                        `}
+                        <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+                             ${!isEditing ? `<button data-action="edit" class="text-gray-500 hover:text-blue-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></button>` : ''}
+                            <div class="relative">
+                                <button data-action="palette" class="text-gray-500 hover:text-green-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a7 7 0 1 0 10 10"/><path d="M12 22a7 7 0 1 0-10-10"/><path d="M22 12a7 7 0 1 0-10 10"/></svg></button>
+                                <div class="color-picker absolute top-full right-0 mt-2 z-10 bg-white p-2 rounded-lg shadow-lg flex space-x-1 hidden">
+                                    ${COLORS.map(color => `<div data-color="${color}" class="w-6 h-6 rounded-full cursor-pointer hover:scale-110 transition-transform ${color}"></div>`).join('')}
+                                </div>
+                            </div>
+                            <button data-action="delete" class="text-gray-500 hover:text-red-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="m8 6 4-4 4 4"/></svg></button>
+                            ${task.day ? `<button data-action="expand" class="transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>` : ''}
+                        </div>
+                    </div>
+                    ${isExpanded && task.day ? `
+                        <div class="mt-3">
+                            <textarea placeholder="Add a note..." class="w-full h-24 p-2 text-sm bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">${task.notes || ''}</textarea>
+                        </div>
+                    ` : ''}
+                `;
+            };
+
+            renderContent();
+
+            card.addEventListener('click', (e) => {
+                const actionButton = e.target.closest('button');
+                if (!actionButton) {
+                    if (e.target.tagName === 'H4' && task.day) {
+                        expandedTaskId = isExpanded ? null : task.id;
+                        renderApp();
+                    }
+                    return;
+                }
+                const action = actionButton.dataset.action;
+                if (action === 'edit') {
+                    isEditing = true;
+                    renderContent();
+                    card.querySelector('input').focus();
+                } else if (action === 'palette') {
+                    card.querySelector('.color-picker').classList.toggle('hidden');
+                } else if (action === 'delete') {
+                    handleDeleteTask(task.id);
+                } else if (action === 'expand') {
+                    expandedTaskId = isExpanded ? null : task.id;
+                    renderApp();
+                }
+            });
+            
+            card.addEventListener('focusout', (e) => {
+                if (e.target.tagName === 'INPUT') {
+                    const newTitle = e.target.value.trim();
+                    if (newTitle && newTitle !== task.title) {
+                        handleUpdateTask(task.id, { title: newTitle });
+                    } else {
+                        isEditing = false;
+                        renderContent();
+                    }
+                }
+                 if (e.target.tagName === 'TEXTAREA') {
+                    const newNotes = e.target.value;
+                    if (newNotes !== task.notes) {
+                        handleUpdateTask(task.id, { notes: newNotes });
+                    }
+                }
+            });
+            
+             card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
+                    e.target.blur();
+                }
+            });
+            
+            card.querySelector('.color-picker')?.addEventListener('click', (e) => {
+                if(e.target.dataset.color) {
+                    handleUpdateTask(task.id, { color: e.target.dataset.color });
+                    card.querySelector('.color-picker').classList.add('hidden');
+                }
+            });
+
+
+            return card;
+        }
+
+        function setupDragAndDrop() {
+            const dropTargets = [...document.querySelectorAll('[data-day]'), taskPanelContainer];
+            
+            dropTargets.forEach(target => {
+                target.ondragover = null;
+                target.ondragleave = null;
+                target.ondrop = null;
+
+                target.ondragover = e => {
+                    e.preventDefault();
+                    target.classList.add(target.dataset.day ? 'bg-blue-100' : 'bg-gray-200');
+                    if(target.dataset.day) target.classList.add('ring-2', 'ring-blue-400');
+                };
+                target.ondragleave = e => {
+                    target.classList.remove(target.dataset.day ? 'bg-blue-100' : 'bg-gray-200');
+                     if(target.dataset.day) target.classList.remove('ring-2', 'ring-blue-400');
+                };
+                target.ondrop = e => {
+                    e.preventDefault();
+                    target.classList.remove(target.dataset.day ? 'bg-blue-100' : 'bg-gray-200');
+                     if(target.dataset.day) target.classList.remove('ring-2', 'ring-blue-400');
+                    
+                    const taskId = e.dataTransfer.getData('taskId');
+                    if (taskId) {
+                        const targetDay = target.dataset.day || null;
+                        if (expandedTaskId === taskId) {
+                            expandedTaskId = null;
+                        }
+                        handleUpdateTask(taskId, { day: targetDay });
+                    }
+                };
+            });
+        }
+        
+        function renderApp() {
+            taskPanelContent.innerHTML = '';
+            calendarGrid.innerHTML = '';
+
+            const panelTasks = tasks.filter(t => !t.day).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+            
+            if (panelTasks.length > 0) {
+                 panelTasks.forEach(task => taskPanelContent.appendChild(createTaskCard(task)));
+            } else {
+                taskPanelContent.innerHTML = `<div class="text-center text-gray-500 py-10"><p>No tasks in your list.</p><p>Click '+' to add one!</p></div>`;
+            }
+
+            DAYS_OF_WEEK.forEach(day => {
+                const dayColumn = document.createElement('div');
+                dayColumn.className = 'flex-1 bg-gray-100 rounded-xl p-4 transition-all duration-300';
+                dayColumn.dataset.day = day;
+                
+                dayColumn.innerHTML = `<h3 class="font-bold text-lg text-center text-gray-700 mb-4 pb-2 border-b-2 border-gray-200">${day}</h3><div class="day-content h-full min-h-[400px]"></div>`;
+                
+                const dayTasks = tasks.filter(t => t.day === day).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+                const dayContent = dayColumn.querySelector('.day-content');
+                if (dayTasks.length > 0) {
+                    dayTasks.forEach(task => dayContent.appendChild(createTaskCard(task)));
+                } else {
+                    dayContent.innerHTML = `<div class="text-center text-gray-400 mt-10">Drop tasks here</div>`;
+                }
+
+                calendarGrid.appendChild(dayColumn);
+            });
+            
+            setupDragAndDrop();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderApp();
+            addTaskBtn.addEventListener('click', handleAddTask);
+        });
+
+    </script>
+</body>
+</html>
